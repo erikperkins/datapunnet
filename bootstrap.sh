@@ -15,6 +15,7 @@ echo $! >> "../$pids"
 popd
 
 pushd django_app
+mkdir -p tmp
 django_pid=tmp/server.pid
 uwsgi --http :3002 --daemonize tmp/server.log --pidfile $django_pid --module django_app.wsgi
 echo $(cat "$django_pid") >> "../$pids"
