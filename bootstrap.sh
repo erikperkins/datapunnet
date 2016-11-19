@@ -17,7 +17,13 @@ popd
 pushd django_app
 mkdir -p tmp
 django_pid=tmp/server.pid
-uwsgi --http :3002 --daemonize tmp/server.log --pidfile $django_pid --module django_app.wsgi
+uwsgi \
+  --http-socket :3002 \
+  --daemonize tmp/server.log \
+  --pidfile $django_pid \
+  --module django_app.wsgi \
+  --processes 4 \
+  --threads 2
 echo $(cat "$django_pid") >> "../$pids"
 popd
 
