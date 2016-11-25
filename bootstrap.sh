@@ -2,10 +2,10 @@
 pids=apps.pid
 
 pushd scalatra_app
-export SCALATRA_PORT=3004
-sbt assembly
-java -jar target/scala-2.11/scalatra_app-assembly-0.1.0.jar &
-echo $! >> "../$pids"
+sbt package
+cp target/scala-2.11/scalatra_app_2.11-0.1.0.war \
+  tomcat/webapps/scalatra_app.war
+./tomcat/bin/startup.sh
 popd
 
 pushd snap_app
@@ -22,8 +22,8 @@ uwsgi \
   --daemonize tmp/server.log \
   --pidfile $django_pid \
   --module django_app.wsgi \
-  --processes 4 \
-  --threads 2
+  --processes 1 \
+  --threads 1
 echo $(cat "$django_pid") >> "../$pids"
 popd
 

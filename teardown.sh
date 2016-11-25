@@ -6,3 +6,5 @@ do
   kill -9 "$line"
 done < $pids
 cat /dev/null > $pids
+
+./scalatra_app/tomcat/bin/shutdown.sh
