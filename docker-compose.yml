@@ -1,0 +1,21 @@
+version: '2'
+services:
+
+  db:
+    image: postgres:9.5.5
+    ports:
+      - "5432:5432"
+
+  rails_app:
+    build: ./rails_app
+    command: bin/rails server --port 3001 --binding 0.0.0.0
+    ports:
+      - "3001:3001"
+    links:
+      - db
+    volumes:
+      - ./rails_app/:/app
+
+  snap_app:
+    build: ./snap_app
+    command: snapapp -p 3003
