@@ -1,21 +1,72 @@
 version: '2'
 services:
 
-  db:
-    image: postgres:9.5.5
-    ports:
-      - "5432:5432"
-
-  rails_app:
+  rails:
     build: ./rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
-    ports:
-      - "3001:3001"
+    expose:
+      - 3001
     links:
-      - db
+      - postgres
+      - redis
+      - django
+      - snap
     volumes:
-      - ./rails_app/:/app
+      - ./rails_app/:/app/
 
-  snap_app:
+  django:
+    build: ./django_app
+    command: uwsgi --http-socket :3002 --module django_app.wsgi
+    expose:
+      - 3002
+    links:
+      - postgres
+    volumes:
+      - ./django_app/:/app/
+
+  snap:
     build: ./snap_app
     command: snapapp -p 3003
+    expose:
+      - 3003
+    links:
+      - postgres
+    volumes:
+      - ./snap_app/:/app/
+
+#  scalatra:
+#    build: ./scalatra_app
+#    command: ???
+#    expose:
+#      - 3004
+#    links:
+#      - postgres
+#    volumes:
+#      - ./scalatra_app/:/app/
+
+  nginx:
+    image: nginx:1.11.6
+    ports:
+      - "80:80"
+      - "3102:3102"
+    links:
+      - rails
+      - django
+      - snap
+#      - scalatra
+    volumes:
+      - "./nginx/conf.d/:/etc/nginx/conf.d/"
+    volumes_from:
+       - django
+
+  postgres:
+    image: postgres:9.5.5
+    volumes:
+      - ./fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
+    expose:
+      - 5432
+
+  redis:
+    image: redis:3.2.5
+    expose:
+      - 6379
