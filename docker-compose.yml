@@ -34,15 +34,15 @@ services:
     volumes:
       - ./snap_app/:/app/
 
-#  scalatra:
-#    build: ./scalatra_app
-#    command: ???
-#    expose:
-#      - 3004
-#    links:
-#      - postgres
-#    volumes:
-#      - ./scalatra_app/:/app/
+  scalatra:
+    build: ./scalatra_app
+    command: catalina.sh run
+    expose:
+      - 8080
+    links:
+      - postgres
+    volumes:
+      - ./scalatra_app/:/app/
 
   nginx:
     image: nginx:1.11.6
@@ -53,7 +53,7 @@ services:
       - rails
       - django
       - snap
-#      - scalatra
+      - scalatra
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
     volumes_from:
@@ -62,7 +62,7 @@ services:
   postgres:
     image: postgres:9.5.5
     volumes:
-      - ./fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
+      - ./postgres/fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
     expose:
       - 5432
 
