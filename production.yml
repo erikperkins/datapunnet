@@ -2,52 +2,45 @@ version: '2'
 services:
 
   rails:
-    build: ./rails_app
     image: erikperkins/rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
-    ports:
-      - 3001:3001
-    depends_on:
+    expose:
+      - 3001
+    links:
       - postgres
       - redis
 
   django:
-    build: ./django_app
     image: erikperkins/django_app
     command: uwsgi --http-socket :3002 --module django_app.wsgi
-    ports:
-      - 3002:3002
-    depends_on:
+    expose:
+      - 3002
+    links:
       - postgres
     volumes:
       - ./django_app/:/app/
 
   snap:
-    build: ./snap_app
     image: erikperkins/snap_app
     command: snapapp -p 3003
-    ports:
-      - 3003:3003
-    depends_on:
+    expose:
+      - 3003
+    links:
       - postgres
 
   scalatra:
-    build: ./scalatra_app
     image: erikperkins/scalatra_app
     command: catalina.sh run
-    ports:
-      - 8080:8080
-    depends_on:
+    expose:
+      - 8080
+    links:
       - postgres
 
   nginx:
     image: nginx:1.11.6
     ports:
       - 80:80
-      - 3101:3101
       - 3102:3102
-      - 3103:3103
-      - 3104:3104
     links:
       - rails
       - django
@@ -69,3 +62,8 @@ services:
     image: redis:3.2.5
     expose:
       - 6379
+
+  rabbitmq:
+    image: rabbitmq:3.6.6
+    expose:
+      - 15672
