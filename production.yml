@@ -1,0 +1,69 @@
+version: '2'
+services:
+
+  rails:
+    image: erikperkins/rails_app
+    command: bin/rails server --port 3001 --binding 0.0.0.0
+    expose:
+      - 3001
+    links:
+      - postgres
+      - redis
+
+  django:
+    image: erikperkins/django_app
+    command: uwsgi --http-socket :3002 --module django_app.wsgi
+    expose:
+      - 3002
+    links:
+      - postgres
+    volumes:
+      - ./django_app/:/app/
+
+  snap:
+    image: erikperkins/snap_app
+    command: snapapp -p 3003
+    expose:
+      - 3003
+    links:
+      - postgres
+
+  scalatra:
+    image: erikperkins/scalatra_app
+    command: catalina.sh run
+    expose:
+      - 8080
+    links:
+      - postgres
+
+  nginx:
+    image: nginx:1.11.6
+    ports:
+      - 80:80
+      - 3102:3102
+    links:
+      - rails
+      - django
+      - snap
+      - scalatra
+    volumes:
+      - "./nginx/conf.d/:/etc/nginx/conf.d/"
+    volumes_from:
+       - django
+
+  postgres:
+    image: postgres:9.5.5
+    volumes:
+      - ./postgres/fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
+    expose:
+      - 5432
+
+  redis:
+    image: redis:3.2.5
+    expose:
+      - 6379
+
+  rabbitmq:
+    image: rabbitmq:3.6.6
+    expose:
+      - 15672
