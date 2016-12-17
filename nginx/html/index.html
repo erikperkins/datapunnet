@@ -1,0 +1,49 @@
+<h1>Welcome to the Ecosystem</h1>
+
+<a href="http://www.backpasture.net/django/machine_learning/">Machine learning</a>
+
+<p>
+  This website is intended to be an exhibition of different web development and
+  data science techniques. Architecturally, it consists of several applications
+  implemented in different languages and frameworks, organized in a service-oriented
+  fashion. External APIs are employed as well, to collect data and distribute
+  computations. The user interface is implemented via a collection of JavaScript
+  and CSS libraries.
+</p>
+
+<p>
+  In greater detail, the composition of this site is as follows. The application
+  infrastructure consists of
+</p>
+
+<ul>
+  <li>Amazon Web Services EC2 for hosting</li>
+  <li>CircleCI for continuous integration</li>
+  <li>Github for version control</li>
+  <li>PostgreSQL for structured data storage</li>
+  <li>Amazon Web Services S3 for unstructured data storage</li>
+  <li>Amazon Web Services EMR for distributed computing</li>
+</ul>
+
+<p>
+  The application implementation has the following components
+</p>
+
+<ul>
+  <li>Ruby on Rails for the main application functionality</li>
+  <li>Python/Django for machine learning processes</li>
+  <li>Haskell/Snap for user authentication</li>
+  <li>Scala/Scalatra for distributed computing with Spark</li>
+  <li>AngularJS for the user interface</li>
+  <li>D3JS for data visualization</li>
+  <li>Bootstrap for styling</li>
+</ul>
+
+<p>
+  The three subordinate applications expose RESTful JSON APIs, through which the main
+  Rails application communicates with them via ActiveResource. In the main
+  application, some functionality is extracted to a Rails engine. The Scala/Scalatra
+  application uses categorical design patterns (monoids, applicative functors,
+  monads, algebraic data types, etc.) wherever possible, while the Haskell/Snap
+  application uses these patterns essentially by default.
+</p>
