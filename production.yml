@@ -20,6 +20,14 @@ services:
     volumes:
       - ./django_app/:/app/
 
+  flask:
+    image: erikperkins/flask_app
+    command: python main.py
+    expose:
+      - 3005
+    links:
+      - postgres
+
   snap:
     image: erikperkins/snap_app
     command: snapapp -p 3003
