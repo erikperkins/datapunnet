@@ -24,6 +24,17 @@ services:
     volumes:
       - ./django_app/:/django_app/
 
+  flask:
+    build: ./flask_app
+    image: erikperkins/flask_app
+    command: python main.py
+    ports:
+      - 3005:3005
+    depends_on:
+      - postgres
+    volumes:
+      - ./flask_app/:/flask_app/
+
   snap:
     build: ./snap_app
     image: erikperkins/snap_app
@@ -50,9 +61,11 @@ services:
       - 3102:3102
       - 3103:3103
       - 3104:3104
+      - 3105:3105
     links:
       - rails
       - django:app
+      - flask
       - snap
       - scalatra
     volumes:
