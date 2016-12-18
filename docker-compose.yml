@@ -16,7 +16,7 @@ services:
   django:
     build: ./django_app
     image: erikperkins/django_app
-    command: uwsgi --http-socket :3002 --module django_app.wsgi
+    command: uwsgi --http-socket :3002 --module django_app.wsgi --py-autoreload=3
     ports:
       - 3002:3002
     depends_on:
