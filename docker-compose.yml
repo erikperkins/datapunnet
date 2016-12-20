@@ -5,24 +5,28 @@ services:
     build: ./rails_app
     image: erikperkins/rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: redis://redis:6379
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     ports:
       - 3001:3001
-    depends_on:
-      - postgres
+    links:
       - redis
+      - postgres
     volumes:
       - ./rails_app/:/rails_app/
 
-  django:
-    build: ./django_app
-    image: erikperkins/django_app
-    command: uwsgi --http-socket :3002 --module django_app.wsgi --py-autoreload=3
-    ports:
-      - 3002:3002
-    depends_on:
-      - postgres
-    volumes:
-      - ./django_app/:/django_app/
+#  django:
+#    build: ./django_app
+#    image: erikperkins/django_app
+#    command: uwsgi --http-socket :3002 --module django_app.wsgi --py-autoreload=3
+#    ports:
+#      - 3002:3002
+#    depends_on:
+#      - postgres
+#    volumes:
+#      - ./django_app/:/django_app/
 
   flask:
     build: ./flask_app
@@ -64,7 +68,7 @@ services:
       - 3105:3105
     links:
       - rails
-      - django:app
+#      - django:app
       - flask
       - snap
       - scalatra
@@ -72,8 +76,9 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.development.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-    volumes_from:
-       - django
+      - "./rails_app/public/assets/:/assets/"
+#    volumes_from:
+#       - django
 
   postgres:
     image: postgres:9.5.5
@@ -86,6 +91,30 @@ services:
     image: redis:3.2.5
     expose:
       - 6379
+
+  resque-worker:
+    image: erikperkins/rails_app
+    links:
+      - redis
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379
+      QUEUE: '*'
+      LOGGING: 1
+    command: bin/bundle exec rake environment resque:work
+    volumes_from:
+      - rails
+
+  resque-scheduler:
+    image: erikperkins/rails_app
+    links:
+      - redis
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379
+    command: bin/bundle exec rake environment resque:scheduler
+    volumes_from:
+      - rails
 
   rabbitmq:
     image: rabbitmq:3.6.6
