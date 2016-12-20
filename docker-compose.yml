@@ -6,7 +6,7 @@ services:
     image: erikperkins/rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
     environment:
-      RAILS_ENV: production
+      RAILS_ENV: development # production
       REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     ports:
@@ -17,23 +17,12 @@ services:
     volumes:
       - ./rails_app/:/rails_app/
 
-#  django:
-#    build: ./django_app
-#    image: erikperkins/django_app
-#    command: uwsgi --http-socket :3002 --module django_app.wsgi --py-autoreload=3
-#    ports:
-#      - 3002:3002
-#    depends_on:
-#      - postgres
-#    volumes:
-#      - ./django_app/:/django_app/
-
   flask:
     build: ./flask_app
     image: erikperkins/flask_app
     command: python main.py
     ports:
-      - 3005:3005
+      - 3002:3002
     depends_on:
       - postgres
     volumes:
@@ -68,7 +57,6 @@ services:
       - 3105:3105
     links:
       - rails
-#      - django:app
       - flask
       - snap
       - scalatra
@@ -77,8 +65,7 @@ services:
       - "./nginx/nginx.development.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
       - "./rails_app/public/assets/:/assets/"
-#    volumes_from:
-#       - django
+      - "./rails_app/:/rails_app/"
 
   postgres:
     image: postgres:9.5.5
