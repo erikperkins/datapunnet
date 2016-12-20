@@ -6,7 +6,7 @@ services:
     image: erikperkins/rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
     environment:
-      RAILS_ENV: development # production
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     ports:
@@ -64,8 +64,7 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.development.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./rails_app/public/assets/:/assets/"
-      - "./rails_app/:/rails_app/"
+      - "./rails_app/public/:/var/www/public"
 
   postgres:
     image: postgres:9.5.5
