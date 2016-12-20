@@ -1,2 +1,3 @@
 /apps.pid
 /docker-compose.override.yml
+*.pem

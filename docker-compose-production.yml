@@ -1,33 +1,24 @@
 version: '2'
-services:
 
+services:
   rails:
     image: erikperkins/rails_app
     command: bin/rails server --port 3001 --binding 0.0.0.0
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     expose:
       - 3001
     links:
       - postgres
       - redis
 
-  django:
-    image: erikperkins/django_app
-    command: uwsgi --http-socket :3002 --module django_app.wsgi
-    expose:
-      - 3002
-    links:
-      - postgres
-    volumes:
-      - ./django_app/:/app/
-
   flask:
     image: erikperkins/flask_app
     command: python main.py
     expose:
-      - 3005
+      - 3002
     links:
       - postgres
 
@@ -51,18 +42,16 @@ services:
     image: nginx:1.11.6
     ports:
       - 80:80
-      - 3102:3102
     links:
       - rails
-      - django
+      - flask
       - snap
       - scalatra
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-    volumes_from:
-       - django
+      - "./rails_app/public/:/var/www/public"
 
   postgres:
     image: postgres:9.5.5
@@ -81,7 +70,7 @@ services:
     links:
       - redis
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
       QUEUE: '*'
       LOGGING: 1
@@ -92,7 +81,7 @@ services:
     links:
       - redis
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
     command: bin/bundle exec rake environment resque:scheduler
 
