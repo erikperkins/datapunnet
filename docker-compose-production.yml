@@ -13,6 +13,8 @@ services:
     links:
       - postgres
       - redis
+    volumes:
+      - "./nginx/assets/:/rails_app/public/assets/"
 
   flask:
     image: erikperkins/flask_app
@@ -51,7 +53,7 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./rails_app/public/:/var/www/public"
+      - "./nginx/assets/:/var/www/public/assets/"
 
   postgres:
     image: postgres:9.5.5
