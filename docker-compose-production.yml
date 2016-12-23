@@ -14,15 +14,13 @@ services:
       - postgres
       - redis
     volumes:
-      - "./nginx/assets/:/rails_app/public/assets/"
+      - assets:/rails_app/public/assets/
 
   flask:
     image: erikperkins/flask_app
     command: python main.py
     expose:
       - 3002
-    links:
-      - postgres
 
   snap:
     image: erikperkins/snap_app
@@ -53,11 +51,12 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./nginx/assets/:/var/www/public/assets/"
+      - assets:/var/www/public/assets/
 
   postgres:
     image: postgres:9.5.5
     volumes:
+      - postgres:/var/lib/postgresql/data/
       - ./postgres/fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
     expose:
       - 5432
@@ -91,3 +90,10 @@ services:
     image: rabbitmq:3.6.6
     expose:
       - 15672
+
+volumes:
+  assets:
+    driver: local
+
+  postgres:
+    driver: local

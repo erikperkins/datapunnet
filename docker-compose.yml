@@ -23,8 +23,6 @@ services:
     command: python main.py
     ports:
       - 3002:3002
-    depends_on:
-      - postgres
     volumes:
       - ./flask_app/:/flask_app/
 
@@ -64,19 +62,19 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.development.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./rails_app/public/:/var/www/public"
+      - "./rails_app/public/:/var/www/public/"
 
   postgres:
     image: postgres:9.5.5
     volumes:
       - ./postgres/fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
-    expose:
-      - 5432
+    ports:
+      - 5432:5432
 
   redis:
     image: redis:3.2.5
-    expose:
-      - 6379
+    ports:
+      - 6379:6379
 
   resque-worker:
     image: erikperkins/rails_app
@@ -104,5 +102,9 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.6.6
-    expose:
-      - 15672
+    ports:
+      - 15672:15672
+
+volumes:
+  rails_assets:
+    driver: local
