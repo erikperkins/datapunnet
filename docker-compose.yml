@@ -2,57 +2,47 @@ version: '2'
 
 services:
   rails:
-    build: ./rails_app
     image: erikperkins/rails_app
+    entrypoint: /rails_app/docker-entrypoint.sh
     command: bin/rails server --port 3001 --binding 0.0.0.0
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-    ports:
-      - 3001:3001
+    expose:
+      - 3001
     links:
       - postgres
       - redis
     volumes:
-      - ./rails_app/:/rails_app/
+      - assets:/rails_app/public/assets/
 
   flask:
-    build: ./flask_app
     image: erikperkins/flask_app
     command: python main.py
-    ports:
-      - 3002:3002
-    volumes:
-      - ./flask_app/:/flask_app/
+    expose:
+      - 3002
 
   snap:
-    build: ./snap_app
     image: erikperkins/snap_app
     command: snapapp -p 3003
-    ports:
-      - 3003:3003
-    depends_on:
+    expose:
+      - 3003
+    links:
       - postgres
 
   scalatra:
-    build: ./scalatra_app
     image: erikperkins/scalatra_app
     command: catalina.sh run
-    ports:
-      - 8080:8080
-    depends_on:
+    expose:
+      - 8080
+    links:
       - postgres
 
   nginx:
     image: nginx:1.11.6
     ports:
       - 80:80
-      - 3101:3101
-      - 3102:3102
-      - 3103:3103
-      - 3104:3104
-      - 3105:3105
     links:
       - rails
       - flask
@@ -60,51 +50,51 @@ services:
       - scalatra
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
-      - "./nginx/nginx.development.conf:/etc/nginx/nginx.conf"
+      - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./rails_app/public/:/var/www/public/"
+      - assets:/var/www/public/assets/
 
   postgres:
     image: postgres:9.5.5
     volumes:
+      - postgres:/var/lib/postgresql/data/
       - ./postgres/fixtures.sql:/docker-entrypoint-initdb.d/fixtures.sql
-    ports:
-      - 5432:5432
+    expose:
+      - 5432
 
   redis:
     image: redis:3.2.5
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
 
   resque-worker:
     image: erikperkins/rails_app
     links:
       - redis
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
-    volumes_from:
-      - rails
 
   resque-scheduler:
     image: erikperkins/rails_app
     links:
       - redis
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://redis:6379
     command: bin/bundle exec rake environment resque:scheduler
-    volumes_from:
-      - rails
 
   rabbitmq:
     image: rabbitmq:3.6.6
-    ports:
-      - 15672:15672
+    expose:
+      - 15672
 
 volumes:
-  rails_assets:
+  assets:
+    driver: local
+
+  postgres:
     driver: local
