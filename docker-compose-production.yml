@@ -3,7 +3,7 @@ version: '2'
 services:
   rails:
     image: erikperkins/rails_app
-    command: bin/rails server --port 3001 --binding 0.0.0.0
+    command: rake assets:precompile && bin/rails server --port 3001 --binding 0.0.0.0
     environment:
       RAILS_ENV: production
       REDIS_URL: redis://redis:6379
@@ -14,15 +14,13 @@ services:
       - postgres
       - redis
     volumes:
-      - "./nginx/assets/:/rails_app/public/assets/"
+      - assets:/rails_app/public/assets/
 
   flask:
     image: erikperkins/flask_app
     command: python main.py
     expose:
       - 3002
-    links:
-      - postgres
 
   snap:
     image: erikperkins/snap_app
@@ -53,7 +51,7 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - "./nginx/assets/:/var/www/public/assets/"
+      - assets:/var/www/public/assets/
 
   postgres:
     image: postgres:9.5.5
@@ -91,3 +89,7 @@ services:
     image: rabbitmq:3.6.6
     expose:
       - 15672
+
+volumes:
+  assets:
+    driver: local
