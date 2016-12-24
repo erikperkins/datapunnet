@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx:1.11.6
+    ports:
+      - 80:80
+    volumes:
+      - "./nginx/conf.d/:/etc/nginx/conf.d/"
+      - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
+      - "./nginx/html/:/etc/nginx/html/"
+
+volumes:
+  assets:
+    driver: local
