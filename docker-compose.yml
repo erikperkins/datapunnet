@@ -19,7 +19,7 @@ services:
 
   flask:
     image: erikperkins/flask_app
-    command: python main.py
+    command: uwsgi --ini uwsgi.ini
     expose:
       - 3002
 
