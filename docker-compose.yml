@@ -48,6 +48,7 @@ services:
       - flask
       - snap
       - scalatra
+      - rabbitmq
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
@@ -88,9 +89,16 @@ services:
     command: bin/bundle exec rake environment resque:scheduler
 
   rabbitmq:
-    image: rabbitmq:3.6.6
+    image: rabbitmq:3.6.6-management
     expose:
+      - 5672
       - 15672
+
+  celery-worker:
+    image: erikperkins/flask_app
+    links:
+      - rabbitmq
+    command: celery -A main.celery worker
 
 volumes:
   assets:
