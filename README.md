@@ -1,22 +1,11 @@
-# ecosystem
-Container for an ecosytem of web applications comprising a service-oriented architecture
+# whirlwhim
+A system of machine-learning-backed applications, organized in a
+service-oriented architecture. See it live at [whirlwh.im](http://whirlwh.im).
 
+The main application is Ruby on Rails, which handles rendering client-side
+code and coordinating the other applications. A Python Flask application hosts
+neural network code. A Spark application wrapped in a Scalatra application
+performs statistical natural language processing tasks.  Redis and RabbitMQ handle scheduling and background jobs. Nginx is layered over the top of all the applications, exposing only the default port to the outside world. Each application lives in its own Docker container. The applications communicate with each other by exposting RESTful JSON APIs between the containers.
 
-To get data from S3, do
-
-import boto3
-s3 = boto3.resource('s3')
-data = s3.Object('bucket-name', 'path/to/object').get()['Body'].read()
-
-
-To read an image directly into memory, do
-
-import boto3
-import Image
-from StringIO import StringIO
-
-s3 = boto3.resource('s3')
-body = s3.Object('bucket-name', 'path/to/object').get()['Body'].read() # octet-stream
-bytes = bytearray(body) # Convert octet-stream to bytearray
-image = Image.open(StringIO(bytes)) # Convert bytearray to image
-image.show()
+A simple Haskell Snap application is in place but dormant, eventually to be used for time series analysis. There is also a dormant Python Django application,
+which may find some use someday.
