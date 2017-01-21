@@ -75,6 +75,7 @@ services:
     environment:
       RAILS_ENV: production
       REDIS_URL: redis://redis:6379
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
@@ -86,6 +87,7 @@ services:
     environment:
       RAILS_ENV: production
       REDIS_URL: redis://redis:6379
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     command: bin/bundle exec rake environment resque:scheduler
 
   rabbitmq:
