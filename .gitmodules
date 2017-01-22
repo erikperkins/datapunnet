@@ -1,9 +1,6 @@
 [submodule "rails_app"]
 	path = rails_app
 	url = git@github.com:erikperkins/rails_app
-[submodule "django_app"]
-	path = django_app
-	url = git@github.com:erikperkins/django_app
 [submodule "snap_app"]
 	path = snap_app
 	url = git@github.com:erikperkins/snap_app

@@ -16,3 +16,31 @@ body = s3.Object('bucket-name', 'path/to/object').get()['Body'].read() # octet-s
 bytes = bytearray(body) # Convert octet-stream to bytearray
 image = Image.open(StringIO(bytes)) # Convert bytearray to image
 image.show()
+
+
+To remove a Git submodule:
+
+* Delete the relevant section from .gitmodules:
+
+  [submodule "deleteme"]
+    path = deleteme
+    url = git://github.com/username/deleteme.git
+
+* Stage the .gitmodules changes
+
+  git add .gitmodules
+
+* Delete the relevant section from .git/config
+
+  [submodule "deleteme"]
+    url = git://github.com/username/deleteme.git
+
+* Run (ensure there is no trailing slash)
+
+  git rm --cached path/to/submodule
+
+* Commit
+
+* Delete the submodule directory
+
+  rm -rf path/to/submodule
