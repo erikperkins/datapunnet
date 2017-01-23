@@ -15,7 +15,7 @@ services:
       - postgres
       - redis
     volumes:
-      - assets:/rails_app/public/assets/
+      - public:/rails_app/public/
 
   flask:
     image: erikperkins/flask_app
@@ -53,7 +53,7 @@ services:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
-      - assets:/var/www/public/assets/
+      - public:/var/www/public/
 
   postgres:
     image: postgres:9.5.5
@@ -103,7 +103,8 @@ services:
     command: celery -A main.celery worker
 
 volumes:
-  assets:
+
+  public:
     driver: local
 
   postgres:
