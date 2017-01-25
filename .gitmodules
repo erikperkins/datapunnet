@@ -10,3 +10,9 @@
 [submodule "flask_app"]
 	path = flask_app
 	url = git@github.com:erikperkins/flask_app
+[submodule "iron_app"]
+	path = iron_app
+	url = git@github.com:erikperkins/iron_app
+[submodule "golang_app"]
+	path = golang_app
+	url = git@github.com:erikperkins/golang_app
