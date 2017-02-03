@@ -39,6 +39,38 @@ services:
     links:
       - postgres
 
+  golang:
+    image: erikperkins/golang_app
+    command: /golang_app/golang_app
+    expose:
+      - 3005
+
+  iron:
+    image: erikperkins/iron_app
+    command: /iron_app/target/release/iron_app
+    expose:
+      - 3006
+
+  phoenix:
+    image: erikperkins/phoenix_app
+    entrypoint: /phoenix_app/docker-entrypoint.sh
+    environment:
+      MIX_ENV: prod
+      PORT: 3007
+      TWITTER_CONSUMER_KEY: ${TWITTER_CONSUMER_KEY}
+      TWITTER_CONSUMER_SECRET: ${TWITTER_CONSUMER_SECRET}
+      TWITTER_ACCESS_TOKEN: ${TWITTER_ACCESS_TOKEN}
+      TWITTER_ACCESS_SECRET: ${TWITTER_ACCESS_SECRET}
+    command: mix phoenix.server
+    expose:
+      - 3007
+    links:
+      - postgres
+      - redis
+      - rabbitmq
+    volumes:
+      - static:/phoenix_app/priv/static/
+
   nginx:
     image: nginx:1.11.6
     ports:
@@ -48,12 +80,14 @@ services:
       - flask
       - snap
       - scalatra
+      - phoenix
       - rabbitmq
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
       - public:/var/www/public/
+      - static:/var/www/static/
 
   postgres:
     image: postgres:9.5.5
@@ -96,13 +130,10 @@ services:
       - 5672
       - 15672
 
-  celery-worker:
-    image: erikperkins/flask_app
-    links:
-      - rabbitmq
-    command: celery -A main.celery worker
-
 volumes:
+
+  static:
+    driver: local
 
   public:
     driver: local
