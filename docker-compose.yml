@@ -11,7 +11,7 @@ services:
       REDIS_URL: redis://52.37.63.163:6379
       REDIS_HOST: 52.37.63.163
       FLASK_HOST: 52.36.236.17
-      SCALATRA_HOST: "scalatra"
+      SCALATRA_HOST: scalatra
     expose:
       - 80
     links:
@@ -21,6 +21,8 @@ services:
 
   scalatra:
     image: erikperkins/scalatra_app
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx256m"
     command: catalina.sh run
     expose:
       - 80
@@ -72,9 +74,11 @@ services:
     image: erikperkins/rails_app
     environment:
       RAILS_ENV: production
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
       REDIS_URL: redis://52.37.63.163:6379
       REDIS_HOST: 52.37.63.163
-      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: "scalatra"
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
@@ -83,9 +87,11 @@ services:
     image: erikperkins/rails_app
     environment:
       RAILS_ENV: production
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
       REDIS_URL: redis://52.37.63.163:6379
       REDIS_HOST: 52.37.63.163
-      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: "scalatra"
     command: bin/bundle exec rake environment resque:scheduler
 
 volumes:
