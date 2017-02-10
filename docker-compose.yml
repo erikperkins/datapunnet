@@ -10,6 +10,7 @@ services:
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
       REDIS_URL: redis://52.37.63.163:6379
       REDIS_HOST: 52.37.63.163
+      PHOENIX_HOST: 52.38.13.88
       FLASK_HOST: 52.36.236.17
       SCALATRA_HOST: scalatra
     expose:
