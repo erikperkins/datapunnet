@@ -16,3 +16,7 @@
 [submodule "golang_app"]
 	path = golang_app
 	url = git@github.com:erikperkins/golang_app
+[submodule "phoenix_app"]
+        path = phoenix_app
+        url = git@github.com:erikperkins/phoenix_app
+
