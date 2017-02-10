@@ -1,0 +1,14 @@
+- name: Update Rails Docker Image
+  hosts: main
+  tasks:
+    - docker_service:
+        build: no
+        project_src: ./whirlwhim
+        state: present
+        pull: yes
+        services:
+          - nginx
+          - rails
+          - postgres
+          - resque-worker
+          - resque-scheduler
