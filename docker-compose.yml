@@ -21,8 +21,6 @@ services:
 
   scalatra:
     image: erikperkins/scalatra_app
-    environment:
-      JAVA_OPTS: "-Xms128m -Xmx256m"
     command: catalina.sh run
     expose:
       - 80
