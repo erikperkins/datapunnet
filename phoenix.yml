@@ -1,6 +1,9 @@
-- name: Update Postgres Docker Image
+- name: Update Phoenix Docker Image
   hosts: phoenix
   tasks:
+    - name: Copy docker-compose.yml
+      copy: src=./phoenix_app/docker-compose.yml
+            dest=/home/ubuntu/docker-compose.yml
     - docker_service:
         build: no
         project_src: .
