@@ -4,38 +4,33 @@ services:
   rails:
     image: erikperkins/rails_app
     entrypoint: /rails_app/docker-entrypoint.sh
-    command: bin/rails server --port 3001 --binding 0.0.0.0
+    command: bin/rails server --port 80 --binding 0.0.0.0
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
+      PHOENIX_HOST: 52.38.13.88
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: scalatra
     expose:
-      - 3001
+      - 80
     links:
       - postgres
-      - redis
     volumes:
       - public:/rails_app/public/
-
-  flask:
-    image: erikperkins/flask_app
-    command: uwsgi --ini uwsgi.ini
-    expose:
-      - 3002
-
-  snap:
-    image: erikperkins/snap_app
-    command: snapapp -p 3003
-    expose:
-      - 3003
-    links:
-      - postgres
 
   scalatra:
     image: erikperkins/scalatra_app
     command: catalina.sh run
     expose:
-      - 8080
+      - 80
+
+  snap:
+    image: erikperkins/snap_app
+    command: snapapp -p 80
+    expose:
+      - 80
     links:
       - postgres
 
@@ -43,51 +38,28 @@ services:
     image: erikperkins/golang_app
     command: /golang_app/golang_app
     expose:
-      - 3005
+      - 80
 
   iron:
     image: erikperkins/iron_app
     command: /iron_app/target/release/iron_app
     expose:
-      - 3006
-
-  phoenix:
-    image: erikperkins/phoenix_app
-    entrypoint: /phoenix_app/docker-entrypoint.sh
-    environment:
-      MIX_ENV: prod
-      PORT: 3007
-      TWITTER_CONSUMER_KEY: ${TWITTER_CONSUMER_KEY}
-      TWITTER_CONSUMER_SECRET: ${TWITTER_CONSUMER_SECRET}
-      TWITTER_ACCESS_TOKEN: ${TWITTER_ACCESS_TOKEN}
-      TWITTER_ACCESS_SECRET: ${TWITTER_ACCESS_SECRET}
-    command: mix phoenix.server
-    expose:
-      - 3007
-    links:
-      - postgres
-      - redis
-      - rabbitmq
-    volumes:
-      - static:/phoenix_app/priv/static/
+      - 80
 
   nginx:
     image: nginx:1.11.6
     ports:
       - 80:80
+      - 443:443
     links:
       - rails
-      - flask
       - snap
       - scalatra
-      - phoenix
-      - rabbitmq
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
       - "./nginx/html/:/etc/nginx/html/"
       - public:/var/www/public/
-      - static:/var/www/static/
 
   postgres:
     image: postgres:9.5.5
@@ -97,43 +69,31 @@ services:
     expose:
       - 5432
 
-  redis:
-    image: redis:3.2.5
-    expose:
-      - 6379
-
   resque-worker:
     image: erikperkins/rails_app
-    links:
-      - redis
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: "scalatra"
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
 
   resque-scheduler:
     image: erikperkins/rails_app
-    links:
-      - redis
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: "scalatra"
     command: bin/bundle exec rake environment resque:scheduler
 
-  rabbitmq:
-    image: rabbitmq:3.6.6-management
-    expose:
-      - 5672
-      - 15672
-
 volumes:
-
-  static:
-    driver: local
 
   public:
     driver: local
