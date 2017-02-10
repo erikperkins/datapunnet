@@ -8,17 +8,14 @@ services:
     environment:
       RAILS_ENV: production
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
       FLASK_HOST: 52.36.236.17
-      SCALATRA_HOST: scalatra
-      SNAP_HOST: snap
-      GOLANG_HOST: golang
-      IRON_HOST: iron
+      SCALATRA_HOST: "scalatra"
     expose:
       - 80
     links:
       - postgres
-      - redis
     volumes:
       - public:/rails_app/public/
 
@@ -71,18 +68,12 @@ services:
     expose:
       - 5432
 
-  redis:
-    image: redis:3.2.5
-    expose:
-      - 6379
-
   resque-worker:
     image: erikperkins/rails_app
-    links:
-      - redis
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
       QUEUE: '*'
       LOGGING: 1
@@ -90,11 +81,10 @@ services:
 
   resque-scheduler:
     image: erikperkins/rails_app
-    links:
-      - redis
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
     command: bin/bundle exec rake environment resque:scheduler
 
