@@ -7,8 +7,13 @@ services:
     command: bin/rails server --port 80 --binding 0.0.0.0
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://redis:6379
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      REDIS_URL: redis://redis:6379
+      FLASK_HOST: 52.36.236.17
+      SCALATRA_HOST: scalatra
+      SNAP_HOST: snap
+      GOLANG_HOST: golang
+      IRON_HOST: iron
     expose:
       - 80
     links:
@@ -17,19 +22,11 @@ services:
     volumes:
       - public:/rails_app/public/
 
-  flask:
-    image: erikperkins/flask_app
-    command: uwsgi --ini uwsgi.ini
-    expose:
-      - 80
-
   scalatra:
     image: erikperkins/scalatra_app
     command: catalina.sh run
     expose:
       - 80
-    links:
-      - postgres
 
   snap:
     image: erikperkins/snap_app
@@ -58,10 +55,8 @@ services:
       - 443:443
     links:
       - rails
-      - flask
       - snap
       - scalatra
-      - rabbitmq
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
@@ -80,12 +75,6 @@ services:
     image: redis:3.2.5
     expose:
       - 6379
-
-  rabbitmq:
-    image: rabbitmq:3.6.6-management
-    expose:
-      - 5672
-      - 15672
 
   resque-worker:
     image: erikperkins/rails_app
