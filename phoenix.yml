@@ -11,4 +11,6 @@
         pull: yes
         services:
           - phoenix
-          - postgres
+          - golang
+          - iron
+          - snap
