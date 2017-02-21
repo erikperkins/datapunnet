@@ -1,4 +1,4 @@
-create user rails_app with password 'rails_app';
+create user rails_app with password 'rails_app' superuser login;
 create user snap_app with password 'snap_app';
 create user scalatra_app with password 'scalatra_app';
 create user phoenix_app with password 'phoenix_app';
