@@ -9,6 +9,7 @@
         services:
           - nginx
           - rails
-          - postgres
           - resque-worker
           - resque-scheduler
+          - scalatra
+          - julia
