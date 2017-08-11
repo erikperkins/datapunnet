@@ -25,12 +25,6 @@ services:
     expose:
       - 80
 
-  julia:
-    image: erikperkins/julia_app
-    command: julia tweets.jl
-    expose:
-      - 80
-
   nginx:
     image: nginx:1.11.6
     ports:
@@ -39,7 +33,6 @@ services:
     links:
       - rails
       - scalatra
-      - julia
     volumes:
       - "./nginx/conf.d/:/etc/nginx/conf.d/"
       - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
@@ -75,7 +68,4 @@ services:
 volumes:
 
   public:
-    driver: local
-
-  postgres:
     driver: local
