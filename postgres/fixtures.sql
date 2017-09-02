@@ -21,3 +21,18 @@ insert into todos (id, text) values
 ;
 
 alter table todos owner to snap_app;
+
+\connect rails_app
+
+grant usage, select
+  on all sequences
+  in schema public
+  to rails_app
+;
+
+alter default privileges
+  in schema public
+  grant usage, select
+    on sequences
+    to rails_app
+;

@@ -3,8 +3,30 @@
   tasks:
     - docker_service:
         build: no
-        project_src: .
+        project_src: ./postgres
         state: present
         pull: yes
         services:
           - phoenix
+
+- name: Update Snap Docker Image
+  hosts: phoenix
+  tasks:
+    - docker_service:
+        build: yes
+        project_src: ./snap_app
+        state: present
+        pull: yes
+        services:
+          - snap
+
+- name: Update GoLang Docker Image
+  hosts: phoenix
+  tasks:
+    - docker_service:
+      build: yes
+      project_src: ./golang_app
+      state: present
+      pull: yes
+      services:
+        - golang
