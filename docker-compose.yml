@@ -5,6 +5,7 @@ services:
     image: erikperkins/rails_app
     entrypoint: /rails_app/docker-entrypoint.sh
     command: bin/rails server --port 80 --binding 0.0.0.0
+    restart: on-failure
     environment:
       RAILS_ENV: production
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
@@ -22,11 +23,13 @@ services:
   scalatra:
     image: erikperkins/scalatra_app
     command: catalina.sh run
+    restart: on-failure
     expose:
       - 80
 
   nginx:
     image: nginx:1.11.6
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -52,6 +55,7 @@ services:
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
+    restart: always
 
   resque-scheduler:
     image: erikperkins/rails_app
@@ -64,6 +68,7 @@ services:
       FLASK_HOST: 52.36.236.17
       SCALATRA_HOST: "scalatra"
     command: bin/bundle exec rake environment resque:scheduler
+    restart: always
 
 volumes:
 
