@@ -9,9 +9,7 @@
         repo: git@github.com:erikperkins/datapunnet
 
     - name: Copy docker-compose.yml
-      tags:
-        - start
-        - copy
+      tags: copy
       copy: src=docker-compose.yml
             dest=/home/ubuntu/datapunnet/docker-compose.yml
 
