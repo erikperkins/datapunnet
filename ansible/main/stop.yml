@@ -1,0 +1,42 @@
+- name: Stop Main Server Docker Images
+  hosts: main
+  tasks:
+    - name: Stop Rails
+      tags: rails
+      docker_service:
+        project_src: .
+        state: present
+        stopped: yes
+        services: rails
+
+    - name: Stop Resque worker
+      tags: resque-worker
+      docker_service:
+        project_src: .
+        state: present
+        stopped: yes
+        services: resque-worker
+
+    - name: Stop Resque scheduler
+      tags: resque-scheduler
+      docker_service:
+        project_src: .
+        state: present
+        stopped: yes
+        services: resque-scheduler
+
+    - name: Stop Scalatra
+      tags: scalatra
+      docker_service:
+        project_src: .
+        state: present
+        stopped: yes
+        services: scalatra
+
+    - name: Stop Nginx
+      tags: nginx
+      docker_service:
+        project_src: .
+        state: present
+        stopped: yes
+        services: nginx

@@ -1,0 +1,56 @@
+- name: Start Main Server Docker Images
+  hosts: main
+  tasks:
+    - name: Pull DataPunnet
+      tags: git
+      git:
+        accept_hostkey: yes
+        dest: ./datapunnet
+        repo: git@github.com:erikperkins/datapunnet
+
+    - name: Copy docker-compose.yml
+      tags:
+        - start
+        - copy
+      copy: src=docker-compose.yml
+            dest=/home/ubuntu/datapunnet/docker-compose.yml
+
+    - name: Start Rails
+      tags: rails
+      docker_service:
+        project_src: .
+        state: present
+        pull: yes
+        services: rails
+
+    - name: Start Resque worker
+      tags: resque-worker
+      docker_service:
+        project_src: .
+        state: present
+        pull: yes
+        services: resque-worker
+
+    - name: Start Resque scheduler
+      tags: resque-scheduler
+      docker_service:
+        project_src: .
+        state: present
+        pull: yes
+        services: resque-scheduler
+
+    - name: Start Scalatra
+      tags: scalatra
+      docker_service:
+        project_src: .
+        state: present
+        pull: yes
+        services: scalatra
+
+    - name: Start Nginx
+      tags: nginx
+      docker_service:
+        project_src: .
+        state: present
+        pull: yes
+        services: nginx
