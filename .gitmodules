@@ -17,8 +17,5 @@
 	path = golang_app
 	url = git@github.com:erikperkins/golang_app
 [submodule "phoenix_app"]
-        path = phoenix_app
-        url = git@github.com:erikperkins/phoenix_app
-[submodule "julia_app"]
-	path = julia_app
-	url = git@github.com:erikperkins/julia_app
+  path = phoenix_app
+  url = git@github.com:erikperkins/phoenix_app
