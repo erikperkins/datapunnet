@@ -19,3 +19,6 @@
 [submodule "phoenix_app"]
   path = phoenix_app
   url = git@github.com:erikperkins/phoenix_app
+[submodule "finch_app"]
+	path = finch_app
+	url = git@github.com:erikperkins/finch_app
