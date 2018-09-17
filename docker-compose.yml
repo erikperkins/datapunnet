@@ -1,6 +1,30 @@
 version: '2'
 
 services:
+  finch:
+    image: erikperkins/finch_app
+    command: java -Xms16m -Xmx32m -jar out/artifacts/finch_app_jar/finch_app.jar
+    environment:
+      FINCH_ENV: production
+    restart: on-failure
+    expose:
+      - 80
+
+  nginx:
+    image: nginx:1.11.6
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - rails
+      - finch
+    volumes:
+      - "./nginx/conf.d/:/etc/nginx/conf.d/"
+      - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
+      - "./nginx/html/:/etc/nginx/html/"
+      - public:/var/www/public/
+
   rails:
     image: erikperkins/rails_app
     entrypoint: /rails_app/docker-entrypoint.sh
@@ -14,48 +38,11 @@ services:
       POSTGRES_HOST: 52.37.63.163
       PHOENIX_HOST: 52.38.13.88
       FLASK_HOST: 52.36.236.17
-      SCALATRA_HOST: scalatra
+      FINCH_HOST: finch
     expose:
       - 80
     volumes:
       - public:/rails_app/public/
-
-  scalatra:
-    image: erikperkins/scalatra_app
-    command: catalina.sh run
-    restart: on-failure
-    expose:
-      - 80
-
-  nginx:
-    image: nginx:1.11.6
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    links:
-      - rails
-      - scalatra
-    volumes:
-      - "./nginx/conf.d/:/etc/nginx/conf.d/"
-      - "./nginx/nginx.production.conf:/etc/nginx/nginx.conf"
-      - "./nginx/html/:/etc/nginx/html/"
-      - public:/var/www/public/
-
-  resque-worker:
-    image: erikperkins/rails_app
-    environment:
-      RAILS_ENV: production
-      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-      REDIS_URL: redis://52.37.63.163:6379
-      REDIS_HOST: 52.37.63.163
-      POSTGRES_HOST: 52.37.63.163
-      FLASK_HOST: 52.36.236.17
-      SCALATRA_HOST: "scalatra"
-      QUEUE: '*'
-      LOGGING: 1
-    command: bin/bundle exec rake environment resque:work
-    restart: always
 
   resque-scheduler:
     image: erikperkins/rails_app
@@ -66,11 +53,25 @@ services:
       REDIS_HOST: 52.37.63.163
       POSTGRES_HOST: 52.37.63.163
       FLASK_HOST: 52.36.236.17
-      SCALATRA_HOST: "scalatra"
+      FINCH_HOST: "finch"
     command: bin/bundle exec rake environment resque:scheduler
     restart: always
 
-volumes:
+  resque-worker:
+    image: erikperkins/rails_app
+    environment:
+      RAILS_ENV: production
+      RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
+      REDIS_URL: redis://52.37.63.163:6379
+      REDIS_HOST: 52.37.63.163
+      POSTGRES_HOST: 52.37.63.163
+      FLASK_HOST: 52.36.236.17
+      FINCH_HOST: "finch"
+      QUEUE: '*'
+      LOGGING: 1
+    command: bin/bundle exec rake environment resque:work
+    restart: always
 
+volumes:
   public:
     driver: local
