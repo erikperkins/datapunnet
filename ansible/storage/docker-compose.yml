@@ -1,7 +1,6 @@
 version: '2'
 
 services:
-
   postgres:
     image: postgres:9.5
     volumes:
@@ -9,6 +8,7 @@ services:
       - ./postgresql/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     ports:
       - 5432:5432
+
   redis:
     image: redis:3.2.7
     ports:
@@ -21,6 +21,5 @@ services:
       - 15672:15672
 
 volumes:
-
   postgres:
     driver: local

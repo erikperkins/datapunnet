@@ -1,5 +1,5 @@
 [main]
-35.162.115.174
+datapun.net
 
 [main:vars]
 ansible_user=ubuntu
@@ -7,9 +7,9 @@ ansible_ssh_private_key_file=datapunnet.main.pem
 
 
 [components]
-52.36.236.17
-52.38.13.88
-52.37.63.163
+mnist.datapun.net
+timeseries.datapun.net
+storage.datapun.net
 
 [components:vars]
 ansible_user=ubuntu
@@ -22,12 +22,12 @@ flask
 
 
 [storage]
-52.37.63.163
+storage.datapun.net
 
 
 [phoenix]
-52.38.13.88
+timeseries.datapun.net
 
 
 [flask]
-52.36.236.17
+mnist.datapun.net
