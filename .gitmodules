@@ -4,9 +4,6 @@
 [submodule "snap_app"]
 	path = snap_app
 	url = git@github.com:erikperkins/snap_app
-[submodule "scalatra_app"]
-	path = scalatra_app
-	url = git@github.com:erikperkins/scalatra_app
 [submodule "flask_app"]
 	path = flask_app
 	url = git@github.com:erikperkins/flask_app
