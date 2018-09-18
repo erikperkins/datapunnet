@@ -33,11 +33,11 @@ services:
     environment:
       RAILS_ENV: production
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-      REDIS_URL: redis://52.37.63.163:6379
-      REDIS_HOST: 52.37.63.163
-      POSTGRES_HOST: 52.37.63.163
-      PHOENIX_HOST: 52.38.13.88
-      FLASK_HOST: 52.36.236.17
+      REDIS_URL: redis://storage.datapun.net:6379
+      REDIS_HOST: storage.datapun.net
+      POSTGRES_HOST: storage.datapun.net
+      PHOENIX_HOST: timeseries.datapun.net
+      FLASK_HOST: mnist.datapun.net
       FINCH_HOST: finch
     expose:
       - 80
@@ -49,10 +49,10 @@ services:
     environment:
       RAILS_ENV: production
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-      REDIS_URL: redis://52.37.63.163:6379
-      REDIS_HOST: 52.37.63.163
-      POSTGRES_HOST: 52.37.63.163
-      FLASK_HOST: 52.36.236.17
+      REDIS_URL: redis://storage.datapun.net:6379
+      REDIS_HOST: storage.datapun.net
+      POSTGRES_HOST: storage.datapun.net
+      FLASK_HOST: mnist.datapun.net
       FINCH_HOST: "finch"
     command: bin/bundle exec rake environment resque:scheduler
     restart: always
@@ -62,10 +62,10 @@ services:
     environment:
       RAILS_ENV: production
       RUBY_SECRET_KEY_BASE: ${RUBY_SECRET_KEY_BASE}
-      REDIS_URL: redis://52.37.63.163:6379
-      REDIS_HOST: 52.37.63.163
-      POSTGRES_HOST: 52.37.63.163
-      FLASK_HOST: 52.36.236.17
+      REDIS_URL: redis://storage.datapun.net:6379
+      REDIS_HOST: storage.datapun.net
+      POSTGRES_HOST: storage.datapun.net
+      FLASK_HOST: mnist.datapun.net
       FINCH_HOST: "finch"
       QUEUE: '*'
       LOGGING: 1
