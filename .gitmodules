@@ -22,3 +22,6 @@
 [submodule "postgres"]
 	path = postgres
 	url = git@github.com:erikperkins/postgres
+[submodule "nginx"]
+	path = nginx
+	url = git@github.com:erikperkins/nginx
