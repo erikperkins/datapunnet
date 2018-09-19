@@ -19,3 +19,6 @@
 [submodule "finch_app"]
 	path = finch_app
 	url = git@github.com:erikperkins/finch_app
+[submodule "postgres"]
+	path = postgres
+	url = git@github.com:erikperkins/postgres
