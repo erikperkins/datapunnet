@@ -53,7 +53,7 @@ services:
       REDIS_HOST: storage.datapun.net
       POSTGRES_HOST: storage.datapun.net
       FLASK_HOST: mnist.datapun.net
-      FINCH_HOST: "finch"
+      FINCH_HOST: finch
     command: bin/bundle exec rake environment resque:scheduler
     restart: always
 
@@ -66,7 +66,7 @@ services:
       REDIS_HOST: storage.datapun.net
       POSTGRES_HOST: storage.datapun.net
       FLASK_HOST: mnist.datapun.net
-      FINCH_HOST: "finch"
+      FINCH_HOST: finch
       QUEUE: '*'
       LOGGING: 1
     command: bin/bundle exec rake environment resque:work
