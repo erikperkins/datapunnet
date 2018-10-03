@@ -1,24 +1,21 @@
-[submodule "rails_app"]
-	path = rails_app
-	url = git@github.com:erikperkins/rails_app
 [submodule "snap_app"]
-	path = snap_app
-	url = git@github.com:erikperkins/snap_app
+	path = cranberry
+	url = git@github.com:erikperkins/cranberry
 [submodule "flask_app"]
-	path = flask_app
-	url = git@github.com:erikperkins/flask_app
+	path = blueberry
+	url = git@github.com:erikperkins/blueberry
 [submodule "iron_app"]
-	path = iron_app
-	url = git@github.com:erikperkins/iron_app
+	path = gooseberry
+	url = git@github.com:erikperkins/gooseberry
 [submodule "golang_app"]
-	path = golang_app
-	url = git@github.com:erikperkins/golang_app
+	path = mulberry
+	url = git@github.com:erikperkins/mulberry
 [submodule "phoenix_app"]
-  path = phoenix_app
-  url = git@github.com:erikperkins/phoenix_app
+	path = bayberry
+        url = git@github.com:erikperkins/bayberry
 [submodule "finch_app"]
-	path = finch_app
-	url = git@github.com:erikperkins/finch_app
+	path = cloudberry
+	url = git@github.com:erikperkins/cloudberry
 [submodule "ansible"]
 	path = ansible
 	url = git@github.com:erikperkins/ansible
