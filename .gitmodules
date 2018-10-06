@@ -1,19 +1,19 @@
-[submodule "snap_app"]
+[submodule "cranberry"]
 	path = cranberry
 	url = git@github.com:erikperkins/cranberry
-[submodule "flask_app"]
+[submodule "blueberry"]
 	path = blueberry
 	url = git@github.com:erikperkins/blueberry
-[submodule "iron_app"]
+[submodule "gooseberry"]
 	path = gooseberry
 	url = git@github.com:erikperkins/gooseberry
-[submodule "golang_app"]
+[submodule "mulberry"]
 	path = mulberry
 	url = git@github.com:erikperkins/mulberry
-[submodule "phoenix_app"]
+[submodule "bayberry"]
 	path = bayberry
         url = git@github.com:erikperkins/bayberry
-[submodule "finch_app"]
+[submodule "cloudberry"]
 	path = cloudberry
 	url = git@github.com:erikperkins/cloudberry
 [submodule "ansible"]
