@@ -4,9 +4,6 @@
 [submodule "blueberry"]
 	path = blueberry
 	url = git@github.com:erikperkins/blueberry
-[submodule "gooseberry"]
-	path = gooseberry
-	url = git@github.com:erikperkins/gooseberry
 [submodule "mulberry"]
 	path = mulberry
 	url = git@github.com:erikperkins/mulberry
